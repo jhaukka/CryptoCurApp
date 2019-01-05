@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import "./css/style.css";
+import { Button } from "reactstrap";
 
 class App extends Component {
   render() {
@@ -23,8 +24,8 @@ class App extends Component {
 
         <div class="container">
           <div class="row">
-            <div class="col-sm-4 col-1">1 of 2</div>
-            <div class="col-sm-4 col-2">2 of 2</div>
+            <div class="col-sm-2 col-1">1 of 2</div>
+            <div class="col-sm-6 col-2">2 of 2</div>
             <div class="col-sm-4 col-3">1 of 3</div>
           </div>
         </div>
