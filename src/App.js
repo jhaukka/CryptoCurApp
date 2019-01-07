@@ -7,7 +7,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <CryptoCard name="Ethereum" value="value" marketvalue="marketvalue" />
+        <CryptoCard name="Ethereum" />
       </div>
     );
   }

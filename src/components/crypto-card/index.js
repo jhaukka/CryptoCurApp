@@ -7,21 +7,28 @@ class CryptoCard extends React.Component {
     this.state = {
       name: props.name,
       value: null,
-      lastValue: null,
-      marketvalue: props.marketcap
+      marketvalue: null
     };
+
+    this.pollValue = this.pollValue.bind(this);
   }
 
   componentDidMount() {
+    this.pollValue();
+    setInterval(this.pollValue, 10000);
+  }
+
+  pollValue() {
     const { symbol } = this.state;
     fetch(
-      `https://min-api.cryptocompare.com/data/price?fsym=ETH&tsyms=${symbol},EUR&api_key=047ee697a82cc136e4216a3d7f1b00d551787d9d4d47307951f8b11d10707c92`
+      `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=BTC,ETH,XRP,EOS&tsyms=${symbol},EUR&api_key=047ee697a82cc136e4216a3d7f1b00d551787d9d4d47307951f8b11d10707c92`
     )
       .then(resp => resp.json())
       .then(json => {
-        this.setState({
-          value: json.EUR
-        });
+        this.setState(prevState => ({
+          value: json.DISPLAY.ETH.EUR.PRICE,
+          marketvalue: json.DISPLAY.ETH.EUR.MKTCAP
+        }));
         console.log(json);
       });
   }
