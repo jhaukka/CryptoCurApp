@@ -1,13 +1,12 @@
 import React, { Component } from "react";
 import "./css/style.css";
-// import { Button } from "reactstrap";
-import CryptoCard from "./components/crypto-card";
+import Swiper from "./components/swiper";
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <CryptoCard name="Ethereum" />
+        <Swiper name="ScrollView" />
       </div>
     );
   }
