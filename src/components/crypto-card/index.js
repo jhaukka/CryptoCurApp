@@ -1,6 +1,7 @@
 import React from "react";
 import fetch from "isomorphic-fetch";
 import coin from "../../images/eth-coin.png";
+// import "../../server.js";
 
 class CryptoCard extends React.Component {
   constructor(props) {
@@ -37,6 +38,9 @@ class CryptoCard extends React.Component {
         console.log(json);
       });
   }
+
+  // Haetaan tieto MySQL-tietokannasta
+  pollInfo() {}
 
   // Tulostetaan näytölle
   render() {
