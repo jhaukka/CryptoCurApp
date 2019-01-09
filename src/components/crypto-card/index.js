@@ -1,14 +1,12 @@
 import React from "react";
 import fetch from "isomorphic-fetch";
+
 // Kolikot
 import eth from "../../images/eth-coin.png";
 import btc from "../../images/btc-coin.png";
 import ltc from "../../images/ltc-coin.png";
 import eos from "../../images/eos-coin.png";
 import xrp from "../../images/xrp-coin.png";
-
-// MySQL yhteys
-// import mysql_connect from "../../server.js";
 
 class CryptoCard extends React.Component {
   constructor(props) {
@@ -32,15 +30,15 @@ class CryptoCard extends React.Component {
   }
 
   getImage(code) {
-    if (code == "ETH") {
+    if (code === "ETH") {
       return eth;
-    } else if (code == "BTC") {
+    } else if (code === "BTC") {
       return btc;
-    } else if (code == "EOS") {
+    } else if (code === "EOS") {
       return eos;
-    } else if (code == "XRP") {
+    } else if (code === "XRP") {
       return xrp;
-    } else if (code == "LTC") {
+    } else if (code === "LTC") {
       return ltc;
     }
   }
@@ -48,11 +46,18 @@ class CryptoCard extends React.Component {
   // Haetaan tieto json-tietokannasta
   pollValue() {
     const { symbol } = this.state;
+
     fetch(
       `https://min-api.cryptocompare.com/data/pricemultifull?fsyms=BTC,ETH,XRP,EOS,LTC&tsyms=${symbol},EUR&api_key=047ee697a82cc136e4216a3d7f1b00d551787d9d4d47307951f8b11d10707c92`
     )
       .then(resp => resp.json())
       .then(json => {
+        /*fetch("http://localhost:12500?name=" + this.state.name)
+          .then(res => res.json())
+          .then(json => {
+            console.log(json);
+          });*/
+
         this.setState({
           value: json.DISPLAY[this.state.tag].EUR.PRICE,
           marketvalue: json.DISPLAY[this.state.tag].EUR.MKTCAP,
@@ -78,7 +83,7 @@ class CryptoCard extends React.Component {
       <div className="container shadow">
         <div className="row">
           <div className="col-sm-12 bg blue info">
-            <img src={this.state.image} className="coin" alt="coin-image" />
+            <img src={this.state.image} className="coin" alt="coin" />
 
             <div className="static-name title">
               <h1>{name}</h1>
