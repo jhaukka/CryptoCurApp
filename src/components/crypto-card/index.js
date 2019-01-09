@@ -1,11 +1,14 @@
 import React from "react";
 import fetch from "isomorphic-fetch";
-import eth_coin from "../../images/eth-coin.png";
-import btc_coin from "../../images/btc-coin.png";
-import ltc_coin from "../../images/ltc-coin.png";
-import eos_coin from "../../images/eos-coin.png";
-import xrp_coin from "../../images/xrp-coin.png";
-// import "../../server.js";
+// Kolikot
+import eth from "../../images/eth-coin.png";
+import btc from "../../images/btc-coin.png";
+import ltc from "../../images/ltc-coin.png";
+import eos from "../../images/eos-coin.png";
+import xrp from "../../images/xrp-coin.png";
+
+// MySQL yhteys
+// import mysql_connect from "../../server.js";
 
 class CryptoCard extends React.Component {
   constructor(props) {
@@ -14,7 +17,9 @@ class CryptoCard extends React.Component {
       name: props.name,
       value: null,
       marketvalue: null,
-      symbol: props.symbol
+      symbol: props.symbol,
+      tag: props.tag,
+      image: null
     };
 
     this.pollValue = this.pollValue.bind(this);
@@ -23,36 +28,20 @@ class CryptoCard extends React.Component {
   // Päivittää tiedot, joka 10 sekuntin välein
   componentDidMount() {
     this.pollValue();
-    this.changeImage();
     setInterval(this.pollValue, 10000);
   }
 
-  // Testaa state nimen
-  changeImage() {
-    if (this.state.name === "Ethereum") {
-      console.log("Kyllä löytyy");
-    } else {
-      console.log("Ei löydy");
-    }
-  }
-
-  // Vaihtaa kolikon lyhenteen
-  coinSwitch(coin) {
-    switch (coin) {
-      case this.state.name === "Bitcoin":
-        return "BTC";
-        break;
-      case this.state.name === "Litecoin":
-        return "LTC";
-        break;
-      case this.state.name === "EOS":
-        return "EOS";
-        break;
-      case this.state.name === "Ripple":
-        return "XRP";
-        break;
-      default:
-        return "ETH";
+  getImage(code) {
+    if (code == "ETH") {
+      return eth;
+    } else if (code == "BTC") {
+      return btc;
+    } else if (code == "EOS") {
+      return eos;
+    } else if (code == "XRP") {
+      return xrp;
+    } else if (code == "LTC") {
+      return ltc;
     }
   }
 
@@ -64,11 +53,17 @@ class CryptoCard extends React.Component {
     )
       .then(resp => resp.json())
       .then(json => {
-        this.setState(prevState => ({
-          value: json.DISPLAY.ETH.EUR.PRICE,
-          marketvalue: json.DISPLAY.ETH.EUR.MKTCAP,
-          symbol: json.RAW.ETH.EUR.FROMSYMBOL
-        }));
+        this.setState({
+          value: json.DISPLAY[this.state.tag].EUR.PRICE,
+          marketvalue: json.DISPLAY[this.state.tag].EUR.MKTCAP,
+          symbol: json.RAW[this.state.tag].EUR.FROMSYMBOL,
+          image: this.getImage(this.state.tag)
+        });
+        // this.setState(prevState => ({
+        //   value: json.DISPLAY.ETH.EUR.PRICE,
+        //   marketvalue: json.DISPLAY.ETH.EUR.MKTCAP,
+        //   symbol: json.RAW.ETH.EUR.FROMSYMBOL
+        // }));
         console.log(json);
       });
   }
@@ -83,7 +78,7 @@ class CryptoCard extends React.Component {
       <div className="container shadow">
         <div className="row">
           <div className="col-sm-12 bg blue info">
-            <img src={eth_coin} className="coin" alt="Coin" />
+            <img src={this.state.image} className="coin" alt="coin-image" />
 
             <div className="static-name title">
               <h1>{name}</h1>
@@ -103,7 +98,8 @@ class CryptoCard extends React.Component {
 
         <div className="row">
           <div className="col-sm-12 static-info static-name red">
-            <h3 className="title">Kuvaus ({symbol}) valuutasta</h3>
+            <h3 className="title">Tietoa valuutasta</h3>
+            <div className="tag">Lyhenne: {symbol}</div>
             <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit.
               Vestibulum venenatis dictum vulputate. Aliquam vel egestas tellus,
