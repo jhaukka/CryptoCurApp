@@ -1,7 +1,7 @@
 import React from "react";
 import fetch from "isomorphic-fetch";
 
-// Kolikot
+// Kolikoidet kuvat
 import eth from "../../images/eth-coin.png";
 import btc from "../../images/btc-coin.png";
 import ltc from "../../images/ltc-coin.png";
@@ -24,12 +24,13 @@ class CryptoCard extends React.Component {
     this.pollValue = this.pollValue.bind(this);
   }
 
-  // Päivittää tiedot, joka 10 sekuntin välein
+  // Päivittää tiedot 10 sekuntin välein
   componentDidMount() {
     this.pollValue();
     setInterval(this.pollValue, 10000);
   }
 
+  // Vaihtaa tiedon valuutasta ja vaihtaa kuvan
   getImage(code) {
     if (code === "ETH") {
       return eth;
@@ -53,30 +54,24 @@ class CryptoCard extends React.Component {
     )
       .then(resp => resp.json())
       .then(json => {
-        fetch("http://localhost:12500?name=" + this.state.name)
+        fetch("http://10.1.3.162:12500?name=" + this.state.name)
           .then(res => res.json())
           .then(json => {
             this.setState({ description: json });
           });
 
         // Parsi tässä euro-muutokset
+
+        //
         this.setState({
           value: json.DISPLAY[this.state.tag].EUR.PRICE,
           marketvalue: json.DISPLAY[this.state.tag].EUR.MKTCAP,
           symbol: json.RAW[this.state.tag].EUR.FROMSYMBOL,
           image: this.getImage(this.state.tag)
         });
-        // this.setState(prevState => ({
-        //   value: json.DISPLAY.ETH.EUR.PRICE,
-        //   marketvalue: json.DISPLAY.ETH.EUR.MKTCAP,
-        //   symbol: json.RAW.ETH.EUR.FROMSYMBOL
-        // }));
         console.log(json);
       });
   }
-
-  // Haetaan tieto MySQL-tietokannasta
-  pollInfo() {}
 
   // Tulostetaan näytölle
   render() {

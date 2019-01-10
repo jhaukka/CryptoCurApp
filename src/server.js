@@ -11,7 +11,7 @@ const con = mysql.createPool({
   socketPath: "/tmp/mysql.sock"
 });
 
-//create a server object:
+// Create a server object:
 http
   .createServer(function(req, res) {
     res.setHeader("Access-Control-Allow-Origin", "*");
@@ -19,57 +19,13 @@ http
     res.setHeader("Access-Control-Allow-Methods", "OPTIONS,GET");
     res.setHeader("Access-Control-Allow-Headers", req.headers.origin);
     let opt = url.parse(req.url, true).query["name"];
-    console.log(opt);
     let query = "SELECT * FROM coins WHERE name = '" + opt + "'";
-    //let result = executeQuery(query, myCallbackFunction);
     con.query(query, function(error, results, fields) {
       if (error) throw error;
-      //console.log(results);
       res.writeHead(200, {
         "Content-Type": "x-application/json"
       });
-      //res.write(results[0].description);
       res.end(JSON.stringify(results[0].description));
     });
-    console.log("bloobl");
-    //let text = getText();
-    //res.write(result); //write a response to the client
-    //end the response
   })
-  .listen(12500); //the server object listens on port 8080
-
-const executeQuery = function(querystring, myCallbackFunction) {
-  console.log("on get");
-  con.connect(function(err) {
-    console.log("--- connect");
-    if (err) throw err;
-    con.query(querystring, function(err, result) {
-      console.log("--- kyselyssä");
-      if (err) {
-        throw err;
-      }
-      console.log(result);
-      myCallbackFunction(result);
-      //console.log(result);
-    });
-  });
-  console.log("--- ulos");
-};
-
-const myCallbackFunction = function(result) {
-  return result;
-  //res.write(result);
-  //res.end();
-};
-
-/* con.connect(function(err) {
-  if (err) throw err;
-  console.log("Connected!");
-  let sql = `CREATE TABLE customers (name VARCHAR(255), address VARCHAR(255))`;
-  con.query(sql, function(err, result) {
-    if (err) throw err;
-    console.log("The customers table is created!!");
-  });
-}); */
-
-// export default MySQL_connection;
+  .listen(12500); // The server object listens on port 12500
