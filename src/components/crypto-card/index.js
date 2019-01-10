@@ -17,7 +17,8 @@ class CryptoCard extends React.Component {
       marketvalue: null,
       symbol: props.symbol,
       tag: props.tag,
-      image: null
+      image: null,
+      description: null
     };
 
     this.pollValue = this.pollValue.bind(this);
@@ -52,12 +53,13 @@ class CryptoCard extends React.Component {
     )
       .then(resp => resp.json())
       .then(json => {
-        /*fetch("http://localhost:12500?name=" + this.state.name)
+        fetch("http://localhost:12500?name=" + this.state.name)
           .then(res => res.json())
           .then(json => {
-            console.log(json);
-          });*/
+            this.setState({ description: json });
+          });
 
+        // Parsi tässä euro-muutokset
         this.setState({
           value: json.DISPLAY[this.state.tag].EUR.PRICE,
           marketvalue: json.DISPLAY[this.state.tag].EUR.MKTCAP,
@@ -105,11 +107,7 @@ class CryptoCard extends React.Component {
           <div className="col-sm-12 static-info static-name red">
             <h3 className="title">Tietoa valuutasta</h3>
             <div className="tag">Lyhenne: {symbol}</div>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-              Vestibulum venenatis dictum vulputate. Aliquam vel egestas tellus,
-              at hendrerit sem. Mauris metus ex, pulvinar id congue non.
-            </p>
+            <p>{this.state.description}</p>
             <button
               type="button"
               className="btn btn-primary"

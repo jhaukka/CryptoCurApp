@@ -2,11 +2,13 @@ const mysql = require("mysql");
 const http = require("http");
 const url = require("url");
 
-const con = mysql.createConnection({
+const con = mysql.createPool({
+  connectionLimit: 10,
   host: "localhost",
   user: "root",
   password: "superBasso86",
-  database: "crypto_cur_app_db"
+  database: "crypto_cur_app_db",
+  socketPath: "/tmp/mysql.sock"
 });
 
 //create a server object:
@@ -19,11 +21,20 @@ http
     let opt = url.parse(req.url, true).query["name"];
     console.log(opt);
     let query = "SELECT * FROM coins WHERE name = '" + opt + "'";
-    let result = executeQuery(query, myCallbackFunction);
+    //let result = executeQuery(query, myCallbackFunction);
+    con.query(query, function(error, results, fields) {
+      if (error) throw error;
+      //console.log(results);
+      res.writeHead(200, {
+        "Content-Type": "x-application/json"
+      });
+      //res.write(results[0].description);
+      res.end(JSON.stringify(results[0].description));
+    });
     console.log("bloobl");
     //let text = getText();
-    res.write(result); //write a response to the client
-    res.end(); //end the response
+    //res.write(result); //write a response to the client
+    //end the response
   })
   .listen(12500); //the server object listens on port 8080
 
