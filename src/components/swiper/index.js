@@ -1,6 +1,8 @@
 import React from "react";
-import SwipeableViews from "react-swipeable-views";
 import CryptoCard from "../crypto-card";
+
+// React-Swipeable-Views
+import SwipeableViews from "react-swipeable-views";
 import { bindKeyboard } from "react-swipeable-views-utils";
 
 const styles = {

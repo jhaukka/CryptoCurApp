@@ -24,13 +24,13 @@ class CryptoCard extends React.Component {
     this.pollValue = this.pollValue.bind(this);
   }
 
-  // Päivittää tiedot 10 sekuntin välein
+  // Päivittää arvot 10 sekuntin välein
   componentDidMount() {
     this.pollValue();
     setInterval(this.pollValue, 10000);
   }
 
-  // Vaihtaa tiedon valuutasta ja vaihtaa kuvan
+  // Hakee tiedon kolikosta ja vaihtaa kuvan tämän mukaan
   getImage(code) {
     if (code === "ETH") {
       return eth;
@@ -60,9 +60,8 @@ class CryptoCard extends React.Component {
             this.setState({ description: json });
           });
 
-        // Parsi tässä euro-muutokset
+        // Parsi tässä arvojen lyhenteet ja järjestykset (tämä myöhemmin)
 
-        //
         this.setState({
           value: json.DISPLAY[this.state.tag].EUR.PRICE,
           marketvalue: json.DISPLAY[this.state.tag].EUR.MKTCAP,
@@ -73,13 +72,13 @@ class CryptoCard extends React.Component {
       });
   }
 
-  // Tulostetaan näytölle
+  // Seuraava tulostetaan näytölle
   render() {
     const { name, value, marketvalue, symbol } = this.state;
     return (
       <div className="container shadow">
         <div className="row">
-          <div className="col-sm-12 bg blue info">
+          <div className="col-sm-12 bg info">
             <img src={this.state.image} className="coin" alt="coin" />
 
             <div className="static-name title">
@@ -99,7 +98,7 @@ class CryptoCard extends React.Component {
         </div>
 
         <div className="row">
-          <div className="col-sm-12 static-info static-name red">
+          <div className="col-sm-12 static-info static-name">
             <h3 className="title">Tietoa valuutasta</h3>
             <div className="tag">Lyhenne: {symbol}</div>
             <p>{this.state.description}</p>
